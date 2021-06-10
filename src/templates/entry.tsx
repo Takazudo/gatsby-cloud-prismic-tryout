@@ -1,9 +1,12 @@
 import React from "react";
 import { graphql, Link, PageProps } from "gatsby";
+import { withPrismicPreview } from "gatsby-plugin-prismic-previews";
+import { linkResolver } from "../linkResolver";
 
 export const query = graphql`
   query EntryDetail($id: String!) {
     prismicEntry(id: { eq: $id }) {
+      _previewable
       data {
         body {
           html
@@ -14,7 +17,7 @@ export const query = graphql`
   }
 `;
 
-interface IEntryPageProps extends PageProps {
+interface IEntryPageProps {
   data: any; // TODO: type
 }
 const EntryPage: React.FC<IEntryPageProps> = ({ data }) => {
@@ -32,4 +35,9 @@ const EntryPage: React.FC<IEntryPageProps> = ({ data }) => {
   );
 };
 
-export default EntryPage;
+export default withPrismicPreview(EntryPage, [
+  {
+    repositoryName: process.env.GATSBY_PRISMIC_REPO_NAME,
+    linkResolver,
+  },
+]);

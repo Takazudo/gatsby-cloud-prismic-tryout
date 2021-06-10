@@ -15,7 +15,6 @@ exports.createPages = async ({ graphql, actions }) => {
     }
   `);
 
-  // Create pages for each Page in Prismic using a template.
   for (const node of pages.data.allPrismicEntry.nodes) {
     createPage({
       path: `/entry/${node.uid}`,
