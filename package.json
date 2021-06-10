@@ -15,10 +15,11 @@
     "clean": "gatsby clean"
   },
   "dependencies": {
+    "dotenv": "^10.0.0",
     "gatsby": "^3.7.0",
     "gatsby-plugin-image": "^1.7.0",
-    "gatsby-plugin-prismic-preview": "^2.0.0",
-    "gatsby-source-prismic": "^4.0.0-beta.15",
+    "gatsby-plugin-prismic-previews": "^4.0.0-beta.16",
+    "gatsby-source-prismic": "^4.0.0-beta.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   }
