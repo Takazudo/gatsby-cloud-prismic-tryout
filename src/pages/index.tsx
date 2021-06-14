@@ -1,5 +1,7 @@
 import React from "react";
-import { graphql, Link, PageProps } from "gatsby";
+import { graphql, Link } from "gatsby";
+import { withPrismicPreview } from "gatsby-plugin-prismic-previews";
+import { linkResolver } from "../linkResolver";
 
 export const query = graphql`
   query TopPage {
@@ -11,7 +13,7 @@ export const query = graphql`
   }
 `;
 
-interface IIndexPageProps extends PageProps {
+interface IIndexPageProps {
   data: any; // TODO: type
 }
 const IndexPage: React.FC<IIndexPageProps> = ({ data }) => (
@@ -31,4 +33,9 @@ const IndexPage: React.FC<IIndexPageProps> = ({ data }) => (
   </main>
 );
 
-export default IndexPage;
+export default withPrismicPreview(IndexPage, [
+  {
+    repositoryName: process.env.GATSBY_PRISMIC_REPO_NAME,
+    linkResolver,
+  },
+]);

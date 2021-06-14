@@ -59,6 +59,71 @@ const sharedPrismicOptions = {
   apiEndpoint: process.env.PRISMIC_API_ENDPOINT,
 };
 
+const prismicOptions = {
+  ...{
+    // A Custom Types API token for your Prismic repository that allows your
+    // custom type schemas to automatically be fetched. This is optional.
+    // You can provide your custom type schemas to the plugin manually using
+    // the `schemas` option.
+    //
+    // You can generate a permanent Custom Types API token in the
+    // "API & Security" section of your repository settings in the Custom
+    // Types API tab.
+    //
+    // This is a BETA feature that must be enabled on your Prismic repository.
+    //
+    // See: https://prismic.io/docs/technologies/custom-types-api
+    //customTypesApiToken: "xxx",
+
+    // Provide an object of Prismic custom type JSON schemas to load into
+    // Gatsby. This is required.
+    schemas: {
+      entry: require("./src/prismic-schemas/entry.json"),
+      file: {}
+    },
+
+    //releaseID: process.env.PRISMIC_RELEASE_ID,
+
+    // If you provide a release ID, the plugin will fetch data from Prismic
+    // for a specific release. A Prismic release is a way to gather a
+    // collection of changes for a future version of your website. Note that
+    // if you add changes to a release, you'll need to rebuild your website
+    // to see them.
+    // See: https://user-guides.prismic.io/en/collections/22653-releases-scheduling#the-basics-of-a-release
+    //releaseID: 'example-eiyaingiefahyi7z',
+
+    // Set a link resolver function used to process links in your content.
+    // Fields with rich text formatting or links to internal content use this
+    // function to generate the correct link URL.
+    // The document node, field key (i.e. API ID), and field value are
+    // provided to the function, as seen below. This allows you to use
+    // different link resolver logic for each field if necessary.
+    // See: https://prismic.io/docs/javascript/query-the-api/link-resolving
+    //linkResolver: (doc) => `/${doc.id}`,
+    linkResolver: (doc) => {
+      // Return a URL for the document.
+    },
+
+    // Set an HTML serializer function used to process formatted content.
+    // Fields with rich text formatting use this function to generate the
+    // correct HTML.
+    // The document node, field key (i.e. API ID), and field value are
+    // provided to the function, as seen below. This allows you to use
+    // different HTML serializer logic for each field if necessary.
+    // See: https://prismic.io/docs/nodejs/beyond-the-api/html-serializer
+    htmlSerializer: (type, element, content, children) => {
+      // Your HTML Serializer
+    },
+  },
+  ...sharedPrismicOptions,
+};
+
+// enable release preview for future release
+
+if (process.env.PRISMIC_RELEASE_ID) {
+  prismicOptions.releaseID = process.env.PRISMIC_RELEASE_ID;
+}
+
 module.exports = {
   siteMetadata: {
     title: "My Gatsby Site",
@@ -66,61 +131,7 @@ module.exports = {
   plugins: [
     {
       resolve: "gatsby-source-prismic",
-      options: {
-        ...{
-          // A Custom Types API token for your Prismic repository that allows your
-          // custom type schemas to automatically be fetched. This is optional.
-          // You can provide your custom type schemas to the plugin manually using
-          // the `schemas` option.
-          //
-          // You can generate a permanent Custom Types API token in the
-          // "API & Security" section of your repository settings in the Custom
-          // Types API tab.
-          //
-          // This is a BETA feature that must be enabled on your Prismic repository.
-          //
-          // See: https://prismic.io/docs/technologies/custom-types-api
-          //customTypesApiToken: "xxx",
-
-          // Provide an object of Prismic custom type JSON schemas to load into
-          // Gatsby. This is required.
-          schemas: {
-            entry: require("./src/prismic-schemas/entry.json"),
-          },
-
-          // If you provide a release ID, the plugin will fetch data from Prismic
-          // for a specific release. A Prismic release is a way to gather a
-          // collection of changes for a future version of your website. Note that
-          // if you add changes to a release, you'll need to rebuild your website
-          // to see them.
-          // See: https://user-guides.prismic.io/en/collections/22653-releases-scheduling#the-basics-of-a-release
-          //releaseID: 'example-eiyaingiefahyi7z',
-
-          // Set a link resolver function used to process links in your content.
-          // Fields with rich text formatting or links to internal content use this
-          // function to generate the correct link URL.
-          // The document node, field key (i.e. API ID), and field value are
-          // provided to the function, as seen below. This allows you to use
-          // different link resolver logic for each field if necessary.
-          // See: https://prismic.io/docs/javascript/query-the-api/link-resolving
-          //linkResolver: (doc) => `/${doc.id}`,
-          linkResolver: (doc) => {
-            // Return a URL for the document.
-          },
-
-          // Set an HTML serializer function used to process formatted content.
-          // Fields with rich text formatting use this function to generate the
-          // correct HTML.
-          // The document node, field key (i.e. API ID), and field value are
-          // provided to the function, as seen below. This allows you to use
-          // different HTML serializer logic for each field if necessary.
-          // See: https://prismic.io/docs/nodejs/beyond-the-api/html-serializer
-          htmlSerializer: (type, element, content, children) => {
-            // Your HTML Serializer
-          },
-        },
-        ...sharedPrismicOptions,
-      },
+      options: prismicOptions,
     },
     {
       resolve: "gatsby-plugin-prismic-previews",
